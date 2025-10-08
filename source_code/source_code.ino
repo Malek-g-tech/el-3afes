@@ -1,5 +1,5 @@
 int ledr = 5, ledg = 6;
-//int button = 7;
+int button = D5;
 int capteurs[8] = {13, 25, 26, 27, 32, 33, 34, 35};
 
 int avg0s[8],
@@ -50,7 +50,6 @@ void calibration(){
     thrsh[j] = (avg0s[j]+avg1s[j])/2;
   }
   digitalWrite(2, 1);
-  delay(5000);
 }
 
 int get(int i){
@@ -115,6 +114,8 @@ void setup(){
 void loop(){
   //while(digitalRead(button) != 1){}
   calibration();
+  while(!digitalRead(button));
+
   while(1){
     Serial.print("IRs: ");
     int allblack = 1;
