@@ -6,8 +6,6 @@ int avg0s[8],
     avg1s[8],
     thrsh[8];
 
-
-
 void calibration(){
   digitalWrite(2, 1);
   delay(200);
@@ -59,8 +57,6 @@ int get(int i){
   int a = analogRead(capteurs[i]);
   return a >= thrsh[i];
 }
-
-
 
 void move_for(int speed) {
   //forward left motor
