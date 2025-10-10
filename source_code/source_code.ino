@@ -1,11 +1,12 @@
+#include <Arduino.h>
 #define lm1 19
 #define lm2 21
 
 
 // right motor
 
-#define rm1 23
-#define rm2 22
+#define rm1 22
+#define rm2 23
 int button = 5;
 int capteurs[8] = {13, 25, 26, 27, 32, 33, 34, 35};
 
@@ -85,43 +86,56 @@ int get(int i){
 
 void move_for(int speed) {
   //forward left motor
-  analogWrite(lm1,speed);
-  analogWrite(lm2,0);
+  ledcWrite(lm1,speed);
+  ledcWrite(lm2,0);
   // forward right motor
-  analogWrite(rm1,speed);
-  analogWrite(rm2,0);
+  ledcWrite(rm1,speed);
+  ledcWrite(rm2,0);
 }
 
-void hard_left(){
-  analogWrite(lm1,0);
-  analogWrite(lm2,0);
+// void hard_left(){
+//   analogWrite(lm1,0);
+//   analogWrite(lm2,0);
 
-  // forward right motor
-  analogWrite(rm1,255);
-  analogWrite(rm2,0);
-}
+//   // forward right motor
+//   analogWrite(rm1,255);
+//   analogWrite(rm2,0);
+// }
 
 
-void hard_right(){
-  analogWrite(lm1,255);
-  analogWrite(lm2,0);
+// void hard_right(){
+//   analogWrite(lm1,255);
+//   analogWrite(lm2,0);
 
   
-  // forward right motor
+//   // forward right motor
 
 
-  analogWrite(rm1,0);
-  analogWrite(rm2,0);
+//   analogWrite(rm1,0);
+//   analogWrite(rm2,0);
 
-}
+// }
 
 int lasterr = 0;
 int interr = 0;
 
 // supposing that the infras are in a left to right layout
 
+#define ch1 0
+
 void setup(){
   Serial.begin(9600);
+  pinMode(lm1, OUTPUT);
+  pinMode(lm2, OUTPUT);
+  pinMode(rm1, OUTPUT);
+  pinMode(rm2, OUTPUT);
+  ledcAttach(lm1,5000,8);
+  ledcAttach(lm2,5000,8);
+  ledcAttach(rm1,5000,8);
+  ledcAttach(rm2,5000,8);
+  // ledcAttachPin(19,ch1);
+  // ledcSetup(ch1,1000,8);
+  // setupMotors();
   //pinMode(ledr, OUTPUT);
   //pinMode(ledg, OUTPUT);
   //pinMode(button, INPUT);
@@ -133,34 +147,45 @@ void setup(){
 
 void loop(){
   //while(digitalRead(button) != 1){}
-  calibration();
-  move_for(50);
-  delay(2000);
-  move_for(0);
-  hard_left();
-  delay(1000);
-  hard_right();
-  delay(1000);
-  move_for(0);
-  while(!digitalRead(button));
+  // calibration();
+  // motorAForward(50);
 
-  while(1){
-    Serial.print("IRs: ");
-    int allblack = 1;
-    for(int i=0;i<8;i++){
-      //Serial.print(get(i));
-      allblack = allblack*get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
-    }
-    if(allblack){
-      digitalWrite(2, 1);
-    }else{
-      digitalWrite(2, 0);
-    }
-    //Serial.print("\n");
-    pid();
-    Serial.print("\n");
+  // while(!digitalRead(button));
+  // analogWrite(lm1,50);
+  // analogWrite(rm1,50);
+  // delay(1000);
+  // analogWrite(lm1,0);
+  // analogWrite(rm1,0);
+
+
+  // digitalWrite(lm1,HIGH);
+  move_for(100);
+  // digitalWrite(lm1, HIGH);
+  // digitalWrite(lm2, LOW);
+
+  // digitalWrite(rm1, HIGH);
+  // digitalWrite(rm2, LOW);
+  // delay(5000);
+  // digitalWrite(lm1,LOW);
+  // digitalWrite(rm1,HIGH);
+  // ledcWrite(lm1,70);
+  // while(1){
+  //   Serial.print("IRs: ");
+  //   int allblack = 1;
+  //   for(int i=0;i<8;i++){
+  //     //Serial.print(get(i));
+  //     allblack = allblack*get(i);
+  //     //Serial.print(" ");
+  //     //Serial.println(digitalRead(button));
+  //   }
+  //   if(allblack){
+  //     digitalWrite(2, 1);
+  //   }else{
+  //     digitalWrite(2, 0);
+  //   }
+  //   //Serial.print("\n");
+  //   // pid();
+  //   Serial.print("\n");
     
-  }
+  // }
 }
