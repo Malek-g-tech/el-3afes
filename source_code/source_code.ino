@@ -15,22 +15,6 @@ int avg0s[8],
     thrsh[8];
 
 
-// void pid(){
-//   float sum = 0;
-//   int valsum = 0;
-
-//   // left to right
-//   for(int i=0;i<8;i++){
-//     int x = i < 4? i - 4 : i - 3;
-//     int g = get(i);
-//     sum += g*x;
-//     valsum += g;
-//   }
-//   sum /= valsum;
-//   Serial.print("Err: ");
-//   Serial.print(sum);
-//   //Serial.print("\n");
-// }
 
 
 void calibration(){
@@ -93,28 +77,29 @@ void move_for(int speed) {
   ledcWrite(rm2,0);
 }
 
-// void hard_left(){
-//   analogWrite(lm1,0);
-//   analogWrite(lm2,0);
-
-//   // forward right motor
-//   analogWrite(rm1,255);
-//   analogWrite(rm2,0);
-// }
+void right(int speed){
+  // forward right motor
+  ledcWrite(rm1,speed);
+  ledcWrite(rm2,0);
+}
 
 
-// void hard_right(){
-//   analogWrite(lm1,255);
-//   analogWrite(lm2,0);
+void left(int speed){
+  analogWrite(lm1,speed);
+  analogWrite(lm2,0);
 
-  
-//   // forward right motor
+}
+
+void move_back(int speed){
+  ledcWrite(lm1,0);
+  ledcWrite(lm2,speed);
 
 
-//   analogWrite(rm1,0);
-//   analogWrite(rm2,0);
+  ledcWrite(rm1,0);
+  ledcWrite(rm2,speed);
 
-// }
+}
+
 
 int lasterr = 0;
 int interr = 0;
@@ -133,9 +118,7 @@ void setup(){
   ledcAttach(lm2,5000,8);
   ledcAttach(rm1,5000,8);
   ledcAttach(rm2,5000,8);
-  // ledcAttachPin(19,ch1);
-  // ledcSetup(ch1,1000,8);
-  // setupMotors();
+  
   //pinMode(ledr, OUTPUT);
   //pinMode(ledg, OUTPUT);
   //pinMode(button, INPUT);
@@ -146,46 +129,34 @@ void setup(){
 }
 
 void loop(){
-  //while(digitalRead(button) != 1){}
-  // calibration();
-  // motorAForward(50);
+  while(digitalRead(button) != 1){}
+  calibration();
+ 
 
-  // while(!digitalRead(button));
-  // analogWrite(lm1,50);
-  // analogWrite(rm1,50);
-  // delay(1000);
-  // analogWrite(lm1,0);
-  // analogWrite(rm1,0);
+  while(!digitalRead(button));
 
 
-  // digitalWrite(lm1,HIGH);
+
+  
   move_for(100);
-  // digitalWrite(lm1, HIGH);
-  // digitalWrite(lm2, LOW);
-
-  // digitalWrite(rm1, HIGH);
-  // digitalWrite(rm2, LOW);
-  // delay(5000);
-  // digitalWrite(lm1,LOW);
-  // digitalWrite(rm1,HIGH);
-  // ledcWrite(lm1,70);
-  // while(1){
-  //   Serial.print("IRs: ");
-  //   int allblack = 1;
-  //   for(int i=0;i<8;i++){
-  //     //Serial.print(get(i));
-  //     allblack = allblack*get(i);
-  //     //Serial.print(" ");
-  //     //Serial.println(digitalRead(button));
-  //   }
-  //   if(allblack){
-  //     digitalWrite(2, 1);
-  //   }else{
-  //     digitalWrite(2, 0);
-  //   }
-  //   //Serial.print("\n");
-  //   // pid();
-  //   Serial.print("\n");
+  
+  while(1){
+    Serial.print("IRs: ");
+    int allblack = 1;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack = allblack*get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack){
+      digitalWrite(2, 1);
+    }else{
+      digitalWrite(2, 0);
+    }
+    //Serial.print("\n");
+    pid();
+    Serial.print("\n");
     
-  // }
+  }
 }

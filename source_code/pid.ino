@@ -9,8 +9,6 @@ void pid(float kp, float kd){
     err += g*x;
     valsum += g;
   }
-  if(valsum != 0)
-    err /= valsum;
 
   float derr = err - lasterror;
   lasterror = err;
