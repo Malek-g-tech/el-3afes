@@ -1,12 +1,11 @@
 #include <Arduino.h>
-#define lm1 19
-#define lm2 21
-
+#define rm1 19
+#define rm2 21
 
 // right motor
 
-#define rm1 22
-#define rm2 23
+#define lm1 22
+#define lm2 23
 int button = 5;
 int capteurs[8] = {13, 25, 26, 27, 32, 33, 34, 35};
 
@@ -79,14 +78,24 @@ void move_for(int speed) {
 
 void right(int speed){
   // forward right motor
-  ledcWrite(rm1,speed);
-  ledcWrite(rm2,0);
+  if(speed>0){
+    ledcWrite(rm1,speed);
+    ledcWrite(rm2,0);
+  }else{
+    ledcWrite(rm1,0);
+    ledcWrite(rm2,-speed);
+  }
 }
 
 
 void left(int speed){
-  analogWrite(lm1,speed);
-  analogWrite(lm2,0);
+  if(speed>0){
+    analogWrite(lm1,speed);
+    analogWrite(lm2,0);
+  }else{
+    analogWrite(lm1,0);
+    analogWrite(lm2,-speed);
+  }
 
 }
 
@@ -107,7 +116,8 @@ int interr = 0;
 // supposing that the infras are in a left to right layout
 
 #define ch1 0
-
+int basespeed = 80;
+int maxspeed  = 150;
 void setup(){
   Serial.begin(9600);
   pinMode(lm1, OUTPUT);
@@ -133,14 +143,89 @@ void loop(){
   calibration();
  
 
+  delay(5000);
   while(!digitalRead(button));
+ 
+  // bda sibaa9
+  while(1){ // morabba3
+    pid(4, 1);
+    int allblack = 1;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack = allblack*get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(!allblack){
+      break;
+    }
+  }
 
+  while(1){ // awel 50%
+    pid(15, 2);
+    int allblack = 1;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack = allblack*get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack){
+      break;
+    }
+  }
+  basespeed = 50;
+  maxspeed = 100;
+  int t = 100;
+  while(1){ // hexagon
+    pid_right(15, 2);
+    int allblack = 1;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack = allblack*get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack && t < 0){
+      break;
+    }
+    t--;
+  }
+  //delay(300);
+  //move_for(0);
+  //delay(500);
+  basespeed = 60;
+  maxspeed = 120;
+  for(int i=0;i<200;i++){ // ba3d hexa (mit9atta3)
+    pid_right(15, 2);
+    /*int allblack = 1;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack = allblack*get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack){
+      break;
+    }*/
+  }
 
+  while(1){ // el7aadda
+    pid_right(15, 2);
+    int err = 0;
+    for(int i=0;i<8;i++){
+      int x = i < 4? i - 4 : i - 3;
+      int g = get(i);
+      err += g*x;
+    }
 
-  
-  move_for(100);
-  
-  while(1){
+    if(err>9)
+      break;
+  }
+
+  move_for(0);
+  while(1);
+  /*while(1){
     Serial.print("IRs: ");
     int allblack = 1;
     for(int i=0;i<8;i++){
@@ -155,8 +240,8 @@ void loop(){
       digitalWrite(2, 0);
     }
     //Serial.print("\n");
-    pid();
+    pid(10,0.5);
     Serial.print("\n");
     
-  }
+  }*/
 }
