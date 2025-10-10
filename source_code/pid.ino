@@ -12,6 +12,6 @@ void pid(){
   sum /= valsum;
   Serial.print("Err: ");
   Serial.print(sum);
-  //Serial.print("\n");
+  // Serial.print("\n");
 }
 
