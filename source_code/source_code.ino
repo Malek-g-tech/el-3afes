@@ -6,6 +6,12 @@
 
 #define lm1 22
 #define lm2 23
+
+// led
+
+#define blue_led 2 
+
+
 int button = 5;
 int capteurs[8] = {13, 25, 26, 27, 32, 33, 34, 35};
 
@@ -17,11 +23,11 @@ int avg0s[8],
 
 
 void calibration(){
-  digitalWrite(2, 1);
+  digitalWrite(blue_led, 1);
   delay(200);
-  digitalWrite(2, 0);
+  digitalWrite(blue_led, 0);
   delay(5000);
-  digitalWrite(2, 1);
+  digitalWrite(blue_led, 1);
   for(int j=0;j<8;j++){
     avg0s[j] = 0;
   }
@@ -33,13 +39,13 @@ void calibration(){
   for(int j=0;j<8;j++){
     avg0s[j] /= 100;
   }
-  digitalWrite(2, 0);
+  digitalWrite(blue_led, 0);
   delay(200);
-  digitalWrite(2, 1);
+  digitalWrite(blue_led, 1);
   delay(200);
-  digitalWrite(2, 0);
+  digitalWrite(blue_led, 0);
   delay(5000);
-  digitalWrite(2, 1);
+  digitalWrite(blue_led, 1);
   for(int j=0;j<8;j++){
     avg1s[j] = 0;
   }
@@ -51,11 +57,11 @@ void calibration(){
   for(int j=0;j<8;j++){
     avg1s[j] /= 100;
   }
-  digitalWrite(2, 0);
+  digitalWrite(blue_led, 0);
   delay(200);
-  digitalWrite(2, 1);
+  digitalWrite(blue_led, 1);
   delay(200);
-  digitalWrite(2, 0);
+  digitalWrite(blue_led, 0);
   for(int j=0;j<8;j++){
     thrsh[j] = (avg0s[j]+avg1s[j])/2;
   }
@@ -139,6 +145,17 @@ void setup(){
 }
 
 void loop(){
+  /*while(1){ // dump
+    for(int i=0;i<8;i++){
+      Serial.print(analogRead(capteurs[i]));
+      Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    Serial.println("");
+  }*/
+  /*right(50);
+  left(124);
+  while(1);*/
   while(digitalRead(button) != 1){}
   calibration();
  
@@ -148,7 +165,7 @@ void loop(){
  
   // bda sibaa9
   while(1){ // morabba3
-    pid(4, 1);
+    pid(4, 1);  // pid(kp,kd)
     int allblack = 1;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
@@ -179,18 +196,20 @@ void loop(){
   int t = 100;
   while(1){ // hexagon
     pid_right(15, 2);
-    int allblack = 1;
+    int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
-      allblack = allblack*get(i);
+      allblack += get(i);
       //Serial.print(" ");
       //Serial.println(digitalRead(button));
     }
-    if(allblack && t < 0){
+    if(allblack>6 && t < 0){
       break;
     }
     t--;
   }
+  move_for(0);
+  delay(1000);
   //delay(300);
   //move_for(0);
   //delay(500);
@@ -219,7 +238,7 @@ void loop(){
       err += g*x;
     }
 
-    if(err>9)
+    if(err>6) // very bad conditional
       break;
   }
 
