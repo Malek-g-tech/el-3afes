@@ -145,7 +145,6 @@ void setup(){
 }
 
 void loop(){
-  move_for(255);
   while(1);
   /*while(1){ // dump
     for(int i=0;i<8;i++){
