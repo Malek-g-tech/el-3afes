@@ -27,7 +27,7 @@ void calibration(){
   digitalWrite(blue_led, 1);
   delay(200);
   digitalWrite(blue_led, 0);
-  delay(5000);
+  delay(2000);
   digitalWrite(blue_led, 1);
   for(int j=0;j<8;j++){
     avg0s[j] = 0;
@@ -45,7 +45,7 @@ void calibration(){
   digitalWrite(blue_led, 1);
   delay(200);
   digitalWrite(blue_led, 0);
-  delay(5000);
+  delay(2000);
   digitalWrite(blue_led, 1);
   for(int j=0;j<8;j++){
     avg1s[j] = 0;
@@ -72,6 +72,11 @@ void calibration(){
 int get(int i){
   int a = analogRead(capteurs[i]);
   return a >= thrsh[i];
+}
+
+int get_bar(int i){
+  int a = analogRead(capteurs[i]);
+  return a < thrsh[i];
 }
 
 void move_for(int speed) {
@@ -223,11 +228,11 @@ void loop(){
   //delay(300);
   //move_for(0);
   //delay(500);
-  basespeed = 50;
+  basespeed = 75;
   maxspeed = 255;
 
   unsigned long startTime = millis();  // record current time
-  while(startTime + 7000 > millis()){ // mit9atta3
+  while(startTime + 5500 > millis()){ // mit9atta3
     
     pid(25, 4);
     
@@ -254,15 +259,50 @@ void loop(){
 
   left(255);
   right(50);
-  dela
-  
-  
-  y(500);
+  delay(500);
   
   basespeed = 150;
-  while(2){
+  while(1){ // 9bal rondpoint
     pid(45, 5);
+    int allblack = 0;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack += get(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack>4){
+      break;
+    }
   }
+ 
+  basespeed = 70;
+  // left(120);
+  // right(-120);
+  // delay(500);
+  startTime = millis();
+  while(1){
+    pid_right_bar(30, 4);
+    if((millis()-startTime) > 2000){
+      break;
+    }
+  }
+
+  while(1){
+    pid_right_bar_narrow(30, 4);
+    int allblack = 0;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack += get_bar(i);
+      //Serial.print(" ");
+      //Serial.println(digitalRead(button));
+    }
+    if(allblack>5){
+      break;
+    }
+  }
+  // move_for(0);
+  // while(1);
 
   // while(1);
   /*while(1){
