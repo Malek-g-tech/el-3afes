@@ -8,6 +8,7 @@
 #define lm2 23
 
 // led
+bool iswhite=false;
 
 #define blue_led 2 
 
@@ -122,8 +123,8 @@ int interr = 0;
 // supposing that the infras are in a left to right layout
 
 #define ch1 0
-int basespeed = 80;
-int maxspeed  = 150;
+int basespeed = 120;
+int maxspeed  = 255;
 void setup(){
   Serial.begin(9600);
   pinMode(lm1, OUTPUT);
@@ -179,7 +180,7 @@ void loop(){
   }
 
   while(1){ // awel 50%
-    pid(15, 2);
+    pid(30, 10);
     int allblack = 1;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
@@ -191,11 +192,18 @@ void loop(){
       break;
     }
   }
-  basespeed = 50;
-  maxspeed = 100;
-  int t = 100;
+  basespeed = 60;
+  maxspeed = 255;
+  int t = 3000;
+  int test = 1;
   while(1){ // hexagon
-    pid_right(15, 2);
+    pid_right(30, 4);
+    if (test == 1){
+      delay(500);
+
+    }
+    basespeed = 70;
+    test *= 0;
     int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
@@ -208,42 +216,55 @@ void loop(){
     }
     t--;
   }
-  move_for(0);
-  delay(1000);
+  
+  left(150);
+  right(20);
+  delay(500);
   //delay(300);
   //move_for(0);
   //delay(500);
-  basespeed = 60;
-  maxspeed = 120;
-  for(int i=0;i<200;i++){ // ba3d hexa (mit9atta3)
-    pid_right(15, 2);
-    /*int allblack = 1;
-    for(int i=0;i<8;i++){
-      //Serial.print(get(i));
-      allblack = allblack*get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
-    }
-    if(allblack){
-      break;
-    }*/
+  basespeed = 50;
+  maxspeed = 255;
+
+  unsigned long startTime = millis();  // record current time
+  while(startTime + 7000 > millis()){ // mit9atta3
+    
+    pid(25, 4);
+    
+
+    
   }
+  basespeed = 120;
+  /*move_for(0);
+  delay(1000);*/
+/*/*/
+
 
   while(1){ // el7aadda
-    pid_right(15, 2);
+    pid_right_7adda(35, 5);
     int err = 0;
     for(int i=0;i<8;i++){
       int x = i < 4? i - 4 : i - 3;
       int g = get(i);
       err += g*x;
     }
-
-    if(err>6) // very bad conditional
-      break;
+    //if(err>6) break;
+    if(get(4)&&get(5)&&get(6)&&get(7)) break;
   }
 
-  move_for(0);
-  while(1);
+  left(255);
+  right(50);
+  dela
+  
+  
+  y(500);
+  
+  basespeed = 150;
+  while(2){
+    pid(45, 5);
+  }
+
+  // while(1);
   /*while(1){
     Serial.print("IRs: ");
     int allblack = 1;
