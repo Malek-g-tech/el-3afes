@@ -148,36 +148,25 @@ void setup(){
     pinMode(capteurs[i], INPUT);
   }
   pinMode(2, OUTPUT);
+  pinMode(5,INPUT_PULLUP);
 }
 
 void loop(){
-  /*while(1){ // dump
-    for(int i=0;i<8;i++){
-      Serial.print(analogRead(capteurs[i]));
-      Serial.print(" ");
-      //Serial.println(digitalRead(button));
-    }
-    Serial.println("");
-  }*/
-  /*right(50);
-  left(124);
-  while(1);*/
-  while(digitalRead(button) != 1){}
+  
   calibration();
  
 
-  delay(5000);
-  while(!digitalRead(button));
+  
+  while(digitalRead(button));
+  delay(500);
  
-  // bda sibaa9
+//   // bda sibaa9
   while(1){ // morabba3
     pid(4, 1);  // pid(kp,kd)
     int allblack = 1;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack = allblack*get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
     }
     if(!allblack){
       break;
@@ -190,15 +179,14 @@ void loop(){
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack = allblack*get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
     }
     if(allblack){
       break;
+      
     }
   }
   basespeed = 60;
-  maxspeed = 255;
+   maxspeed = 255;
   int t = 3000;
   int test = 1;
   while(1){ // hexagon
@@ -207,21 +195,19 @@ void loop(){
       delay(500);
 
     }
-    basespeed = 70;
+    basespeed = 90;
     test *= 0;
     int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack += get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
     }
-    if(allblack>6 && t < 0){
+    if((allblack>6) && t < 0){
       break;
     }
     t--;
   }
-  
+
   left(150);
   right(20);
   delay(500);
@@ -232,17 +218,14 @@ void loop(){
   maxspeed = 255;
 
   unsigned long startTime = millis();  // record current time
-  while(startTime + 5500 > millis()){ // mit9atta3
+  while(startTime + 4500 > millis()){ // mit9atta3
     
     pid(25, 4);
     
 
     
-  }
-  basespeed = 120;
-  /*move_for(0);
-  delay(1000);*/
-/*/*/
+   }
+   basespeed = 120;
 
 
   while(1){ // el7aadda
@@ -254,74 +237,101 @@ void loop(){
       err += g*x;
     }
     //if(err>6) break;
-    if(get(4)&&get(5)&&get(6)&&get(7)) break;
+    if(get(4)&&get(5)&&get(6)&&get(7)) break; // thabbet faaha
   }
 
   left(255);
   right(50);
   delay(500);
-  
+
   basespeed = 150;
   while(1){ // 9bal rondpoint
-    pid(45, 5);
+    pid(45, 10);
     int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack += get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
     }
-    if(allblack>4){
+    if(get(4)&&get(5)&&get(6)){
       break;
     }
   }
- 
-  basespeed = 70;
-  // left(120);
-  // right(-120);
-  // delay(500);
-  startTime = millis();
+
+  move_for(255);
+  delay(105);
+  move_for(0);
+  right(255);
+  left(-255);
+  delay(290);
+  
+
+  while(1){  //rond point
+    left(255);
+    right(103);
+    if(get(0)||get(1)||get(2)||get(3)||get(4)||get(5)||get(6)||get(7)){
+      break;
+    }
+  }
+
+
   while(1){
+    pid_left(50,10);
+    int allblack = 0;
+    for(int i=0;i<8;i++){
+      //Serial.print(get(i));
+      allblack += get(i);
+    }
+    if (allblack > 6){
+      break;
+    }
+  }
+
+  basespeed = 70;
+
+  startTime = millis();
+  while(1){ // mo555 (first 50%)
     pid_right_bar(30, 4);
     if((millis()-startTime) > 2000){
       break;
     }
   }
 
-  while(1){
+  while(1){ // second 50% (pid b 4 capteuret bark)
     pid_right_bar_narrow(30, 4);
     int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack += get_bar(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
     }
     if(allblack>5){
       break;
     }
-  }
-  // move_for(0);
-  // while(1);
+  } // kammel mo55
 
-  // while(1);
-  /*while(1){
-    Serial.print("IRs: ");
-    int allblack = 1;
+
+
+  while(1){
+    pid_right(30, 4);
+    int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
-      allblack = allblack*get(i);
-      //Serial.print(" ");
-      //Serial.println(digitalRead(button));
+      allblack += get_bar(i);
+      
     }
-    if(allblack){
-      digitalWrite(2, 1);
-    }else{
-      digitalWrite(2, 0);
+    if(allblack==8){
+      break;
     }
-    //Serial.print("\n");
-    pid(10,0.5);
-    Serial.print("\n");
-    
-  }*/
+  }
+
+  left(255);
+  right(50);
+  delay(400);
+
+  move_for(255);
+  delay(200);
+
+  move_for(0);
+  while(1);
+
+  
 }
