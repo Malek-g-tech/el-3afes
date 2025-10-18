@@ -128,7 +128,7 @@ int interr = 0;
 // supposing that the infras are in a left to right layout
 
 #define ch1 0
-int basespeed = 120;
+int basespeed = 150;
 int maxspeed  = 255;
 void setup(){
   Serial.begin(9600);
@@ -185,7 +185,7 @@ void loop(){
       
     }
   }
-  basespeed = 60;
+  basespeed = 80;
    maxspeed = 255;
   int t = 3000;
   int test = 1;
@@ -195,7 +195,7 @@ void loop(){
       delay(500);
 
     }
-    basespeed = 90;
+    basespeed = 110;
     test *= 0;
     int allblack = 0;
     for(int i=0;i<8;i++){
@@ -214,7 +214,7 @@ void loop(){
   //delay(300);
   //move_for(0);
   //delay(500);
-  basespeed = 75;
+  basespeed = 95;
   maxspeed = 255;
 
   unsigned long startTime = millis();  // record current time
@@ -225,7 +225,7 @@ void loop(){
 
     
    }
-   basespeed = 120;
+   basespeed = 140;
 
 
   while(1){ // el7aadda
@@ -273,7 +273,7 @@ void loop(){
     }
   }
 
-
+  basespeed = 60;
   while(1){
     pid_left(50,10);
     int allblack = 0;
@@ -286,7 +286,7 @@ void loop(){
     }
   }
 
-  basespeed = 70;
+  basespeed = 90;
 
   startTime = millis();
   while(1){ // mo555 (first 50%)
