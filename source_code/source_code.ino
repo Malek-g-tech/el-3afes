@@ -155,10 +155,18 @@ void loop(){
   
   calibration();
  
+//  while(1) {
+//   for(int i = 0;i < 8;i++){
+
+//     Serial.print(analogRead(capteurs[i]));
+//     Serial.print(" ");
+//   }
+//   Serial.print("\n");
+//  }
 
   
-  while(digitalRead(button));
-  delay(500);
+ while(digitalRead(button));
+
  
 //   // bda sibaa9
   while(1){ // morabba3
@@ -173,20 +181,45 @@ void loop(){
     }
   }
 
-  while(1){ // awel 50%
-    pid(30, 10);
+
+  while(1){ // awel 50%   ///elli yemchi
+    pid(50, 10);
     int allblack = 1;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
       allblack = allblack*get(i);
     }
-    if(allblack){
+    if((get(1))&&get(6)&&get_bar(3)&&get_bar(4)){
       break;
       
     }
   }
+
+  ///version mte3i (morabba3), yemcheha toul 
+    unsigned long start = millis();
+    while (millis() - start < 500) 
+    {
+        move_for(255);
+    }
+    
+    while(1)
+    {
+      pid(30, 10);
+      int allblack = 1;
+      for(int i=0;i<8;i++){
+        //Serial.print(get(i));
+        allblack = allblack*get(i);
+      }
+      if(allblack) break;
+
+    }
+ 
+
+
+
+
   basespeed = 80;
-   maxspeed = 255;
+  maxspeed = 255;
   int t = 3000;
   int test = 1;
   while(1){ // hexagon
@@ -218,7 +251,7 @@ void loop(){
   maxspeed = 255;
 
   unsigned long startTime = millis();  // record current time
-  while(startTime + 4500 > millis()){ // mit9atta3
+  while(startTime + 3500 > millis()){ // mit9atta3
     
     pid(25, 4);
     
@@ -267,15 +300,15 @@ void loop(){
 
   while(1){  //rond point
     left(255);
-    right(103);
+    right(90);
     if(get(0)||get(1)||get(2)||get(3)||get(4)||get(5)||get(6)||get(7)){
       break;
     }
   }
 
-  basespeed = 60;
+  basespeed = 100;
   while(1){
-    pid_left(50,10);
+    pid_left(40,7);
     int allblack = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
@@ -298,12 +331,12 @@ void loop(){
 
   while(1){ // second 50% (pid b 4 capteuret bark)
     pid_right_bar_narrow(30, 4);
-    int allblack = 0;
+    int allwhite = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
-      allblack += get_bar(i);
+      allwhite += get_bar(i);
     }
-    if(allblack>5){
+    if(allwhite>5){
       break;
     }
   } // kammel mo55
@@ -312,23 +345,23 @@ void loop(){
 
   while(1){
     pid_right(30, 4);
-    int allblack = 0;
+    int allwhite = 0;
     for(int i=0;i<8;i++){
       //Serial.print(get(i));
-      allblack += get_bar(i);
+      allwhite += get_bar(i);
       
     }
-    if(allblack==8){
+    if(allwhite==8){
       break;
     }
   }
-
+// yarja3 lel puce
   left(255);
   right(50);
-  delay(400);
+  delay(300);
 
   move_for(255);
-  delay(200);
+  delay(180);
 
   move_for(0);
   while(1);
